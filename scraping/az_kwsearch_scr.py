@@ -150,7 +150,7 @@ def make_list(l):
 
 def write_csv(writing_list, filename):
     """Write CSV in output directory"""
-    
+
     os.chdir(f'../../{output_dir_path}')
     for i, j in zip(writing_list, filename):
         with open(j, "w") as f:
