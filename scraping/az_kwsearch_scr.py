@@ -18,6 +18,7 @@ filename = [filename_sb, filename_sp, filename_og]
 
 options = Options()
 options.add_argument('--incognito')
+options.add_argument('--lang=ja-JP')
 # options.add_argument("--disable-gpu")
 # options.add_argument("--disable-extensions")
 # options.add_argument("--proxy-server='direct://'")
