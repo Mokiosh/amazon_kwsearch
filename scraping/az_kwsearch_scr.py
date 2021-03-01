@@ -7,6 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
 
@@ -54,7 +55,9 @@ def search_kw(kwd, URL, search_repeat):
     # connect to internet
     driver.get(URL)
     driver.implicitly_wait(10)
-    driver.find_element_by_xpath("//*[@value='検索']").click()
+    WebDriverWait(driver, 20).until(EC.element_to_be_clickable
+                                    ((By.XPATH, "//*[@value='検索']"))).click()
+    # driver.find_element_by_xpath("//*[@value='検索']").click()
     driver.implicitly_wait(10)
 
     # search keyword
