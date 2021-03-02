@@ -44,8 +44,8 @@ organic_xpath = "//*[@class='sg-col-4-of-12 s-result-item s-asin " \
 organic_asin_xpath = "//*[@class='sg-col-4-of-12 s-result-item s-asin " \
                 "sg-col-4-of-16 sg-col sg-col-4-of-20']"
 
-input_dir_path = './input_dir'
-output_dir_path = './output_dir'
+input_dir_path = 'input_dir'
+output_dir_path = 'output_dir'
 input_file = 'amazon_kwlist.csv'
 
 
