@@ -14,13 +14,13 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 today = datetime.datetime.today().strftime("%Y%m%d%p")
 filename_sb = f"output_dir/{today}_SB.csv"
-filename_sp = f"output_dir{today}_SP.csv"
-filename_og = f"output_dir{today}_OG.csv"
+filename_sp = f"output_dir/{today}_SP.csv"
+filename_og = f"output_dir/{today}_OG.csv"
 filename = [filename_sb, filename_sp, filename_og]
 
 options = Options()
 options.add_argument('--incognito')
-options.add_argument('--headless')
+# options.add_argument('--headless')
 options.add_argument('--lang=ja-JP')
 # options.add_argument("--disable-gpu")
 # options.add_argument("--disable-extensions")
