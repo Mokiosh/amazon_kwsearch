@@ -20,8 +20,8 @@ filename = [filename_sb, filename_sp, filename_og]
 
 options = Options()
 options.add_argument('--incognito')
-# options.add_argument('--headless')
-options.add_argument('--lang=ja-JP')
+options.add_argument('--headless')
+# options.add_argument('--lang=ja-JP')
 # options.add_argument("--disable-gpu")
 # options.add_argument("--disable-extensions")
 # options.add_argument("--proxy-server='direct://'")
@@ -64,7 +64,10 @@ def search_kw(kwd, URL, search_repeat):
     # search keyword
     print(kwd)
     time.sleep(5)
-    searchbox = driver.find_element_by_id("twotabsearchtextbox")
+    # searchbox = driver.find_element_by_id("twotabsearchtextbox")
+    searchbox = WebDriverWait(driver, 20).until(EC.element_to_be_clickable
+                                    ((By.ID, "twotabsearchtextbox")))
+    searchbox.click()
     searchbox.send_keys(kwd)
     driver.find_elements_by_class_name("nav-input")[1].click()
     WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located)
@@ -90,7 +93,6 @@ def search_kw(kwd, URL, search_repeat):
         temp_list.append(str(sb_asin_data))
         temp_list.append(sb_name_data)
         sb_list.append(temp_list)
-        print(sb_list)
         rank += 1
 
     rank = 0
@@ -150,9 +152,7 @@ def make_list(l):
     """Convert raw scraping list to CSV optimized format"""
 
     flatten_list = list(flatten_2d(l))
-    print(flatten_list)
     final_list = "\n".join(",".join(i) for i in flatten_list)
-    print(final_list)
     return final_list
 
 
@@ -181,8 +181,6 @@ for kwd in get_data(input_file):
         current_repeat += 1
     current_repeat = 1
 driver.close()
-
-print(SP_list)
 
 writing_list = \
     [make_list(SB_list), make_list(SP_list), make_list(OG_list)]
