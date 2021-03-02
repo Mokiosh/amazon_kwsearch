@@ -55,10 +55,10 @@ def search_kw(kwd, URL, search_repeat):
     # connect to internet
     driver.get(URL)
     driver.implicitly_wait(10)
-    WebDriverWait(driver, 20).until(EC.element_to_be_clickable
-                                    ((By.XPATH, "//*[@value='検索']"))).click()
+    # WebDriverWait(driver, 20).until(EC.element_to_be_clickable
+    #                                ((By.XPATH, "//*[@value='検索']"))).click()
     # driver.find_element_by_xpath("//*[@value='検索']").click()
-    driver.implicitly_wait(10)
+    # driver.implicitly_wait(10)
 
     # search keyword
     searchbox = driver.find_element_by_id("twotabsearchtextbox")
