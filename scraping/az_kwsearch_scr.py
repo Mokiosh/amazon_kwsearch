@@ -12,9 +12,9 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 today = datetime.datetime.today().strftime("%Y%m%d%p")
-filename_sb = f"{today}_SB.csv"
-filename_sp = f"{today}_SP.csv"
-filename_og = f"{today}_OG.csv"
+filename_sb = f"output_dir/{today}_SB.csv"
+filename_sp = f"output_dir{today}_SP.csv"
+filename_og = f"output_dir{today}_OG.csv"
 filename = [filename_sb, filename_sp, filename_og]
 
 options = Options()
@@ -46,7 +46,7 @@ organic_asin_xpath = "//*[@class='sg-col-4-of-12 s-result-item s-asin " \
 
 input_dir_path = 'input_dir'
 output_dir_path = 'output_dir'
-input_file = 'amazon_kwlist.csv'
+input_file = 'input_dir/amazon_kwlist.csv'
 
 
 def search_kw(kwd, URL, search_repeat):
@@ -61,6 +61,7 @@ def search_kw(kwd, URL, search_repeat):
     # driver.implicitly_wait(10)
 
     # search keyword
+    print(kwd)
     searchbox = driver.find_element_by_id("twotabsearchtextbox")
     searchbox.send_keys(kwd)
     driver.find_elements_by_class_name("nav-input")[1].click()
@@ -156,18 +157,18 @@ def make_list(l):
 def write_csv(writing_list, filename):
     """Write CSV in output directory"""
 
-    os.chdir(output_dir_path)
+    # os.chdir(f"../{output_dir_path}")
     for i, j in zip(writing_list, filename):
         with open(j, "w") as f:
             f.write(i)
-    os.chdir(input_dir_path)
+    # os.chdir(f"../{input_dir_path}")
 
 
 SB_list = []
 SP_list = []
 OG_list = []
 
-os.chdir("input_dir")
+# os.chdir("input_dir")
 current_repeat = 1
 for kwd in get_data(input_file):
     while current_repeat < search_times + 1:
