@@ -32,7 +32,7 @@ options.add_argument('--lang=ja-JP')
 # options.add_argument('--headless') #doesnt work with headless..dont know why
 
 driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
-URL = "https://www.amazon.co.jp/"
+URL = "https://www.amazon.co.jp/ref=gno_logo?language=ja_JP/"
 search_times = 1
 
 # xpath for scraping
@@ -74,22 +74,22 @@ def search_kw(kwd, URL, search_repeat):
     driver.maximize_window()
     driver.implicitly_wait(10)
 
-    # Japanize
-    lang_button = driver.find_element_by_id("icp-touch-link-language")
-    driver.implicitly_wait(10)
-    lang_button.click()
-    driver.implicitly_wait(10)
-    WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located)
-    lang_select = driver.find_element_by_xpath\
-        ("//*[@class='a-icon a-icon-radio']")
-    driver.implicitly_wait(10)
-    lang_select.click()
-    driver.implicitly_wait(10)
-    WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located)
-    back_to_hp = driver.find_element_by_xpath\
-        ("//*[@id='icp-btn-save-announce']/../../span")
-    driver.implicitly_wait(10)
-    back_to_hp.click()
+    # # Japanize
+    # lang_button = driver.find_element_by_id("icp-touch-link-language")
+    # driver.implicitly_wait(10)
+    # lang_button.click()
+    # driver.implicitly_wait(10)
+    # WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located)
+    # lang_select = driver.find_element_by_xpath\
+    #     ("//*[@class='a-icon a-icon-radio']")
+    # driver.implicitly_wait(10)
+    # lang_select.click()
+    # driver.implicitly_wait(10)
+    # WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located)
+    # back_to_hp = driver.find_element_by_xpath\
+    #     ("//*[@id='icp-btn-save-announce']/../../span")
+    # driver.implicitly_wait(10)
+    # back_to_hp.click()
 
 
     # search keyword
