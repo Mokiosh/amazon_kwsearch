@@ -57,7 +57,7 @@ def search_kw(kwd, URL, search_repeat):
 
     # search keyword
     searchbox = WebDriverWait(driver, 20).until(EC.element_to_be_clickable
-                                    ((By.ID, "twotabsearchtextbox")))
+                                                ((By.ID, "twotabsearchtextbox")))
     searchbox.click()
     searchbox.send_keys(kwd)
     driver.find_elements_by_class_name("nav-input")[1].click()
