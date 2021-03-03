@@ -79,9 +79,8 @@ def search_kw(kwd, URL, search_repeat):
     driver.implicitly_wait(10)
     lang_button.click()
     driver.implicitly_wait(10)
-    lang_select = driver.find_element_by_xpath("//*[@class='a-icon "
-                                               "a-icon-radio'"
-                                                  )
+    lang_select = driver.find_element_by_xpath\
+        ("//*[@class='a-icon a-icon-radio']")
     driver.implicitly_wait(10)
     lang_select.click()
     driver.implicitly_wait(10)
