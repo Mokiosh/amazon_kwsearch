@@ -84,7 +84,8 @@ def search_kw(kwd, URL, search_repeat):
     driver.implicitly_wait(10)
     lang_select.click()
     driver.implicitly_wait(10)
-    back_to_hp = driver.find_element_by_id("icp-btn-save-announce")
+    back_to_hp = driver.find_element_by_xpath\
+        ("//*[@id='icp-btn-save-announce']/../../span")
     driver.implicitly_wait(10)
     back_to_hp.click()
 
