@@ -74,6 +74,22 @@ def search_kw(kwd, URL, search_repeat):
     driver.maximize_window()
     driver.implicitly_wait(10)
 
+    # Japanize
+    lang_button = driver.find_element_by_id("icp-touch-link-language")
+    driver.implicitly_wait(10)
+    lang_button.click()
+    driver.implicitly_wait(10)
+    lang_select = driver.find_element_by_xpath("//*[@class='a-icon "
+                                               "a-icon-radio'"
+                                                  )
+    driver.implicitly_wait(10)
+    lang_select.click()
+    driver.implicitly_wait(10)
+    back_to_hp = driver.find_element_by_id("icp-btn-save-announce")
+    driver.implicitly_wait(10)
+    back_to_hp.click()
+
+
     # search keyword
     time.sleep(5)
     searchbox = WebDriverWait(driver, 200).until(EC.element_to_be_clickable
