@@ -13,9 +13,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 import pyrebase
 
 
-
-
-
 today = datetime.datetime.today().strftime("%Y_%m%d_%H%M_%a")
 filename_sb = f"output_dir/{today}_SB.csv"
 filename_sp = f"output_dir/{today}_SP.csv"
@@ -75,7 +72,7 @@ def search_kw(kwd, URL, search_repeat):
 
     # search keyword
     time.sleep(5)
-    searchbox = WebDriverWait(driver, 100).until(EC.element_to_be_clickable
+    searchbox = WebDriverWait(driver, 200).until(EC.element_to_be_clickable
                                     ((By.ID, "twotabsearchtextbox")))
     searchbox.click()
     searchbox.send_keys(kwd)
