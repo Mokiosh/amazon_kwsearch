@@ -1,6 +1,8 @@
 """This is a scraping program to get search result data on each kw"""
 
 import datetime
+import os
+import time
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -54,10 +56,15 @@ def search_kw(kwd, URL, search_repeat):
     # connect to internet
     driver.get(URL)
     driver.implicitly_wait(10)
+    # WebDriverWait(driver, 20).until(EC.element_to_be_clickable
+    #                                ((By.XPATH, "//*[@value='検索']"))).click()
+    # driver.find_element_by_xpath("//*[@value='検索']").click()
+    # driver.implicitly_wait(10)
 
     # search keyword
+    # searchbox = driver.find_element_by_id("twotabsearchtextbox")
     searchbox = WebDriverWait(driver, 20).until(EC.element_to_be_clickable
-                                                ((By.ID, "twotabsearchtextbox")))
+                                    ((By.ID, "twotabsearchtextbox")))
     searchbox.click()
     searchbox.send_keys(kwd)
     driver.find_elements_by_class_name("nav-input")[1].click()
@@ -150,15 +157,18 @@ def make_list(l):
 def write_csv(writing_list, filename):
     """Write CSV in output directory"""
 
+    # os.chdir(f"../{output_dir_path}")
     for i, j in zip(writing_list, filename):
         with open(j, "w") as f:
             f.write(i)
+    # os.chdir(f"../{input_dir_path}")
 
 
 SB_list = []
 SP_list = []
 OG_list = []
 
+# os.chdir("input_dir")
 current_repeat = 1
 for kwd in get_data(input_file):
     while current_repeat < search_times + 1:
