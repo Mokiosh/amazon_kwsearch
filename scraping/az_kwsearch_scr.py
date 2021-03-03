@@ -79,11 +79,13 @@ def search_kw(kwd, URL, search_repeat):
     driver.implicitly_wait(10)
     lang_button.click()
     driver.implicitly_wait(10)
+    WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located)
     lang_select = driver.find_element_by_xpath\
         ("//*[@class='a-icon a-icon-radio']")
     driver.implicitly_wait(10)
     lang_select.click()
     driver.implicitly_wait(10)
+    WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located)
     back_to_hp = driver.find_element_by_xpath\
         ("//*[@id='icp-btn-save-announce']/../../span")
     driver.implicitly_wait(10)
