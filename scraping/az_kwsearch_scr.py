@@ -94,6 +94,12 @@ def search_kw(kwd, URL, search_repeat):
 
 
     # search keyword
+    driver.implicitly_wait(10)
+    driver.refresh()
+    driver.implicitly_wait(10)
+    driver.maximize_window()
+    driver.implicitly_wait(10)
+    
     time.sleep(5)
     WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located)
     searchbox = WebDriverWait(driver, 200).until(EC.element_to_be_clickable
