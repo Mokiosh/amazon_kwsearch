@@ -68,8 +68,8 @@ def search_kw(kwd, URL, search_repeat):
     driver.implicitly_wait(10)
 
     # Japanize
-    lang_button = driver.find_element_by_xpath("//*[@class='nav-arrow "
-                                               "icp-up-down-arrow']")
+    lang_button = driver.find_element_by_xpath\
+        ("//*[@class='nav-icon nav-arrow null']")
     driver.implicitly_wait(10)
     lang_button.click()
 
