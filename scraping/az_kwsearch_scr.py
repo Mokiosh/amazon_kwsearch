@@ -62,6 +62,7 @@ def search_kw(kwd, URL, search_repeat):
     # driver.implicitly_wait(10)
 
     # search keyword
+    time.sleep(5)
     # searchbox = driver.find_element_by_id("twotabsearchtextbox")
     searchbox = WebDriverWait(driver, 20).until(EC.element_to_be_clickable
                                     ((By.ID, "twotabsearchtextbox")))
