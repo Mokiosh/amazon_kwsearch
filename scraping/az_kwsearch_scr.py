@@ -10,8 +10,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
+import pyrebase
 
-today = datetime.datetime.today().strftime("%Y%m%d%H%M%a")
+
+
+
+
+today = datetime.datetime.today().strftime("%Y_%m%d_%H%M_%a")
 filename_sb = f"output_dir/{today}_SB.csv"
 filename_sp = f"output_dir/{today}_SP.csv"
 filename_og = f"output_dir/{today}_OG.csv"
@@ -33,6 +38,7 @@ driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 URL = "https://www.amazon.co.jp/"
 search_times = 1
 
+# xpath for scraping
 sp_xpath = "//*[@data-component-type='sp-sponsored-result']/descendant::h2"
 sp_asin_xpath = "//*[@data-component-type='sp-sponsored-result']" \
                 "/../../../../div"
@@ -44,9 +50,20 @@ organic_xpath = "//*[@class='sg-col-4-of-12 s-result-item s-asin " \
 organic_asin_xpath = "//*[@class='sg-col-4-of-12 s-result-item s-asin " \
                 "sg-col-4-of-16 sg-col sg-col-4-of-20']"
 
+# file path & name
 input_dir_path = 'input_dir'
 output_dir_path = 'output_dir'
 input_file = 'input_dir/amazon_kwlist.csv'
+
+# firebase info
+config = {
+  "apiKey": "AIzaSyB1qsOk2ppgS8fkSop4pJMN5dUqOxmOwIg",
+  "authDomain": "kwsearch-23d25.firebaseapp.com",
+  "databaseURL": "https://kwsearch-23d25-default-rtdb.firebaseio.com",
+  "storageBucket": "kwsearch-23d25.appspot.com"
+}
+
+firebase = pyrebase.initialize_app(config)
 
 
 def search_kw(kwd, URL, search_repeat):
@@ -153,8 +170,11 @@ def write_csv(writing_list, filename):
     """Write CSV in output directory"""
 
     for i, j in zip(writing_list, filename):
+        storage = firebase.storage()
+
         with open(j, "w") as f:
             f.write(i)
+            storage.child(j).put(j)
 
 
 SB_list = []
