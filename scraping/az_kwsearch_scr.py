@@ -69,6 +69,10 @@ def search_kw(kwd, URL, search_repeat):
     # connect to internet
     driver.get(URL)
     driver.implicitly_wait(10)
+    driver.refresh()
+    driver.implicitly_wait(10)
+    driver.maximize_window()
+    driver.implicitly_wait(10)
 
     # search keyword
     time.sleep(5)
