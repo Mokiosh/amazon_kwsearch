@@ -22,14 +22,7 @@ filename = [filename_sb, filename_sp, filename_og]
 options = Options()
 options.add_argument('--incognito')
 options.add_argument('--headless')
-options.add_argument('--lang=ja-JP')
-# options.add_argument("--disable-gpu")
-# options.add_argument("--disable-extensions")
-# options.add_argument("--proxy-server='direct://'")
-# options.add_argument("--proxy-bypass-list=*")
-# options.add_argument("--start-maximized")
-# options.add_argument("--headless")
-# options.add_argument('--headless') #doesnt work with headless..dont know why
+options.add_argument('--lang=ja')
 
 driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 URL = "https://www.amazon.co.jp/ref=gno_logo?language=ja_JP/"
@@ -79,19 +72,21 @@ def search_kw(kwd, URL, search_repeat):
                                                "icp-up-down-arrow']")
     driver.implicitly_wait(10)
     lang_button.click()
-    driver.implicitly_wait(10)
+
     WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located)
     lang_select = driver.find_element_by_xpath\
         ("//*[@class='a-icon a-icon-radio']")
+
     driver.implicitly_wait(10)
     lang_select.click()
+
     driver.implicitly_wait(10)
     WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located)
     back_to_hp = driver.find_element_by_xpath\
         ("//*[@id='icp-btn-save-announce']/../../span")
+
     driver.implicitly_wait(10)
     back_to_hp.click()
-
 
     # search keyword
     driver.implicitly_wait(10)
@@ -99,13 +94,11 @@ def search_kw(kwd, URL, search_repeat):
     driver.implicitly_wait(10)
     driver.maximize_window()
     driver.implicitly_wait(10)
-    
+
     time.sleep(5)
     WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located)
     searchbox = WebDriverWait(driver, 200).until(EC.element_to_be_clickable
                                                  ((By.ID, "twotabsearchtextbox")))
-    # searchbox = driver.find_element_by_id("twotabsearchtextbox")
-    # searchbox.click()
     searchbox.send_keys(kwd)
     driver.find_elements_by_class_name("nav-input")[1].click()
     WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located)
