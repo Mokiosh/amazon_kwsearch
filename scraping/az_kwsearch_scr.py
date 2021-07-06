@@ -19,8 +19,8 @@ now = datetime.datetime.today()
 today = now.strftime("%Y%m%d_%H%M_%a")
 month = f"{now:%b}"
 
-input_dir_path = 'input_dir'
-output_dir_path = 'output_dir'
+input_dir_path = '../input_dir'
+output_dir_path = '../output_dir'
 input_file = f'{input_dir_path}/amazon_kwlist.csv'
 save_path = 'search_data'  # save path on firebase
 
@@ -33,7 +33,7 @@ adname = ['SB', 'SP', 'OG']
 # Chromedriver settings
 options = Options()
 options.add_argument('--incognito')
-options.add_argument('--headless')
+#options.add_argument('--headless')
 options.add_argument('--lang=ja')
 
 driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
@@ -48,14 +48,15 @@ columns = ["date", "keyword", "repeat", "type", "rank", "ASIN", "Name"]
 # xpath for scraping
 sp_xpath = "//*[@data-component-type='sp-sponsored-result']/descendant::h2"
 sp_asin_xpath = "//*[@data-component-type='sp-sponsored-result']" \
-                "/../../../../div"
-sb_xpath = "//*[@class='a-truncate-full a-offscreen']/../span"
-sb_asin_xpath = "//*[@class='a-truncate-full a-offscreen']" \
-                "/../../../../../div"
+                "/../../../.."
+sb_xpath = "//*[@class='a-truncate-cut']"
+sb_asin_xpath = "//*[@class='a-truncate-cut']" \
+                "/../../../.."
 organic_xpath = "//*[@class='sg-col-4-of-12 s-result-item s-asin " \
                 "sg-col-4-of-16 sg-col sg-col-4-of-20']/descendant::h2"
 organic_asin_xpath = "//*[@class='sg-col-4-of-12 s-result-item s-asin " \
                      "sg-col-4-of-16 sg-col sg-col-4-of-20']"
+sbv_xpath = "//*[@class='sbv_xpath']/descendant::h2"
 
 # firebase info
 config = {
@@ -73,20 +74,23 @@ def search_kw(kwd, URL, search_repeat):
     """Use chrome driver for scraping"""
 
     # Connect to internet
+    driver.set_window_size('1200', '1000')
+    driver.maximize_window()
+    driver.implicitly_wait(10)
     driver.get(URL)
     driver.implicitly_wait(10)
     driver.refresh()
     driver.implicitly_wait(10)
-    driver.maximize_window()
-    driver.implicitly_wait(10)
 
     # Change lang setting to jp
+    time.sleep(3)
     lang_button = driver.find_element_by_xpath \
-        ("//*[@class='nav-icon nav-arrow null']")
+        ("//*[@class='icp-button a-declarative']")
     driver.implicitly_wait(10)
     lang_button.click()
 
     WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located)
+    time.sleep(3)
     lang_select = driver.find_element_by_xpath \
         ("//*[@class='a-icon a-icon-radio']")
 
@@ -116,6 +120,7 @@ def search_kw(kwd, URL, search_repeat):
     searchbox.send_keys(kwd)
     driver.find_elements_by_class_name("nav-input")[1].click()
     WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located)
+    time.sleep(3)
 
     # Scraping data
     sb = driver.find_elements_by_xpath(sb_xpath)
@@ -131,8 +136,73 @@ def search_kw(kwd, URL, search_repeat):
     og_list = []
 
     rank = 0
+    last_rank_sb = 0
     for (name, asin) in zip(sb, sb_asin):
-        temp_list = [today, title, f"try_{search_repeat}", "SBA", str(rank + 1)]
+        temp_list_sb = [today, title, f"try_{search_repeat}", "SBA",
+                        str(last_rank_sb + 1)]
+        sb_name_data = name.text.replace(",", "")
+        sb_asin_data = asin.get_attribute("data-asin")
+        if sb_asin_data == "" or sb_asin_data == None:
+            rank += 1
+        else:
+            temp_list_sb.append(str(sb_asin_data))
+            temp_list_sb.append(sb_name_data)
+            rank += 1
+            last_rank_sb += 1
+            sb_list.append(temp_list_sb)
+        last_rank_sb = last_rank_sb
+
+    rank = 0
+    last_rank_sp = 0
+    for (name, asin) in zip(sp, sp_asin):
+        temp_list_sp = [today, title, f"try_{search_repeat}", "SPA", str(rank +
+                                                                       1)]
+        sp_name_data = name.text.replace(",", "")
+        sp_asin_data = asin.get_attribute("data-asin")
+        if sp_asin_data is None:
+            sp_asin_data = ""
+        else:
+            pass
+
+        temp_list_sp.append(sp_asin_data)
+        temp_list_sp.append(sp_name_data)
+        sp_list.append(temp_list_sp)
+        rank += 1
+        last_rank_sp += 1
+        last_rank_sp = last_rank_sp
+
+    rank = 0
+    last_rank_og = 0
+    for (name, asin) in zip(organic, organic_asin):
+        temp_list_og = [today, title, f"try_{search_repeat}", "Organic",
+                      str(rank +
+                                                                          1)]
+        organic_result = name.text.replace(",", "")
+        organic_asin = asin.get_attribute("data-asin")
+        temp_list_og.append(organic_asin)
+        temp_list_og.append(organic_result)
+        og_list.append(temp_list_og)
+        rank += 1
+        last_rank_og += 1
+        last_rank_og = last_rank_og
+
+    # Go to next page
+    next_button = driver.find_element_by_class_name('a-last')
+    next_button.click()
+    WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located)
+
+    # Scraping data
+    sb = driver.find_elements_by_xpath(sb_xpath)
+    sb_asin = driver.find_elements_by_xpath(sb_asin_xpath)
+    sp = driver.find_elements_by_xpath(sp_xpath)
+    sp_asin = driver.find_elements_by_xpath(sp_asin_xpath)
+    organic = driver.find_elements_by_xpath(organic_xpath)
+    organic_asin = driver.find_elements_by_xpath(organic_asin_xpath)
+
+    rank = last_rank_sb
+    for (name, asin) in zip(sb, sb_asin):
+        temp_list = [today, title, f"try_{search_repeat}", "SBA",
+                     str(rank + 1)]
         sb_name_data = name.text.replace(",", "")
         sb_asin_data = asin.get_attribute("data-asin")
         temp_list.append(str(sb_asin_data))
@@ -140,9 +210,10 @@ def search_kw(kwd, URL, search_repeat):
         sb_list.append(temp_list)
         rank += 1
 
-    rank = 0
+    rank = last_rank_sp
     for (name, asin) in zip(sp, sp_asin):
-        temp_list = [today, title, f"try_{search_repeat}", "SPA", str(rank + 1)]
+        temp_list = [today, title, f"try_{search_repeat}", "SPA",
+                     str(rank + 1)]
         sp_name_data = name.text.replace(",", "")
         sp_asin_data = asin.get_attribute("data-asin")
         if sp_asin_data is None:
@@ -155,10 +226,11 @@ def search_kw(kwd, URL, search_repeat):
         sp_list.append(temp_list)
         rank += 1
 
-    rank = 0
+    rank = last_rank_og
     for (name, asin) in zip(organic, organic_asin):
-        temp_list = [today, title, f"try_{search_repeat}", "Organic", str(rank +
-                                                                          1)]
+        temp_list = [today, title, f"try_{search_repeat}", "Organic",
+                     str(rank +
+                         1)]
         organic_result = name.text.replace(",", "")
         organic_asin = asin.get_attribute("data-asin")
         temp_list.append(organic_asin)
