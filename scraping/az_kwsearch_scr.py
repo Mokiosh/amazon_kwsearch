@@ -19,8 +19,8 @@ now = datetime.datetime.today()
 today = now.strftime("%Y%m%d_%H%M_%a")
 month = f"{now:%b}"
 
-input_dir_path = '../input_dir'
-output_dir_path = '../output_dir'
+input_dir_path = '/input_dir'
+output_dir_path = '/output_dir'
 input_file = f'{input_dir_path}/amazon_kwlist.csv'
 save_path = 'search_data'  # save path on firebase
 
